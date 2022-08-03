@@ -1,11 +1,11 @@
 package com.jeongyookgak.jth.domain.usecase
 
-import com.jeongyookgak.jth.domain.model.local.LocalSampleRepo
-import com.jeongyookgak.jth.domain.repository.local.LocalSampleRepository
+import com.jeongyookgak.jth.domain.model.local.LocalProduction
+import com.jeongyookgak.jth.domain.repository.local.LocalProductionRepository
 
-class GetLocalSampleUseCase(private val repository: LocalSampleRepository) {
+class GetLocalSampleUseCase(private val repository: LocalProductionRepository) {
     suspend operator fun invoke(
-    ): List<LocalSampleRepo> {
-        return repository.getLocalSample()
+    ): List<LocalProduction> {
+        return repository.getLocalProductions()
     }
 }

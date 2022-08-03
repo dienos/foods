@@ -4,10 +4,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import com.jeongyookgak.jth.data.repository.LocalSampleRepositoryImpl
-import com.jeongyookgak.jth.data.repository.SampleRepositoryImpl
-import com.jeongyookgak.jth.domain.repository.local.LocalSampleRepository
-import com.jeongyookgak.jth.domain.repository.remote.SampleRepository
+import com.jeongyookgak.jth.data.repository.LocalProductionRepositoryImpl
+import com.jeongyookgak.jth.data.repository.ProductionsRepositoryImpl
+import com.jeongyookgak.jth.domain.repository.local.LocalProductionRepository
+import com.jeongyookgak.jth.domain.repository.remote.ProductionsRepository
 import javax.inject.Singleton
 
 @Module
@@ -16,9 +16,9 @@ abstract class RepositoryModule {
 
     @Singleton
     @Binds
-    abstract fun bindSampleRepository(repository: SampleRepositoryImpl): SampleRepository
+    abstract fun bindProductionsRepository(repository: ProductionsRepositoryImpl): ProductionsRepository
 
     @Singleton
     @Binds
-    abstract fun bindLocalSampleRepository(repository: LocalSampleRepositoryImpl): LocalSampleRepository
+    abstract fun bindLocalSampleRepository(repository: LocalProductionRepositoryImpl): LocalProductionRepository
 }

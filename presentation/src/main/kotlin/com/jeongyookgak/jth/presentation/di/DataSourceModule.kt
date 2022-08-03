@@ -4,10 +4,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import com.jeongyookgak.jth.data.datasource.SampleLocalSource
-import com.jeongyookgak.jth.data.datasource.SampleLocalSourceImpl
-import com.jeongyookgak.jth.data.datasource.SampleRemoteSource
-import com.jeongyookgak.jth.data.datasource.SampleRemoteSourceImpl
+import com.jeongyookgak.jth.data.datasource.ProductionLocalSource
+import com.jeongyookgak.jth.data.datasource.LocalSourceImpl
+import com.jeongyookgak.jth.data.datasource.ProductionsRemoteSource
+import com.jeongyookgak.jth.data.datasource.ProductionsRemoteSourceImpl
 import javax.inject.Singleton
 
 @Module
@@ -15,9 +15,9 @@ import javax.inject.Singleton
 abstract class DataSourceModule {
     @Singleton
     @Binds
-    abstract fun bindSimpleRemoteSource(source: SampleRemoteSourceImpl): SampleRemoteSource
+    abstract fun bindProductionsRemoteSource(source: ProductionsRemoteSourceImpl): ProductionsRemoteSource
 
     @Singleton
     @Binds
-    abstract fun bindSimpleLocalSource(source: SampleLocalSourceImpl): SampleLocalSource
+    abstract fun bindSimpleLocalSource(source: LocalSourceImpl): ProductionLocalSource
 }

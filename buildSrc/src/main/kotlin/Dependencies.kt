@@ -1,5 +1,5 @@
 object Config {
-    const val applicationId = "base.architecture"
+    const val applicationId = "com.jeongyookgak.jth"
 
     object Android {
         const val core = "androidx.core:core-ktx:1.7.0"
@@ -15,8 +15,9 @@ object Config {
 
         object Room {
             private const val roomVersion = "2.4.2"
-            val runtime = "androidx.room:room-runtime:$roomVersion"
-            val compiler = "androidx.room:room-compiler:$roomVersion"
+            const val runtime = "androidx.room:room-runtime:$roomVersion"
+            const val ktx = "androidx.room:room-ktx:$roomVersion"
+            const val compiler = "androidx.room:room-compiler:$roomVersion"
         }
 
         object Test {
@@ -101,7 +102,7 @@ object Config {
 
     object Version {
         const val buildToolVersion = "30.0.3"
-        const val minSdk = 23
+        const val minSdk = 24
         const val compileSdk = 31
         const val targetSdk = 31
         const val versionCode = 1

@@ -7,26 +7,31 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import com.jeongyookgak.jth.data.db.SampleDataBae
-import com.jeongyookgak.jth.data.db.dao.SampleDao
+import com.jeongyookgak.jth.data.db.JeongYookGakDataBase
+import com.jeongyookgak.jth.data.db.converter.CategoryListConverter
+import com.jeongyookgak.jth.data.db.converter.ProductionListConverter
+import com.jeongyookgak.jth.data.db.dao.ProductionsDao
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 object RoomModule {
-    private const val name = "sample.db"
+    private const val name = "productions.db"
 
     @Provides
     @Singleton
-    fun provideSampleDao(dataBase: SampleDataBae): SampleDao {
-        return dataBase.SampleDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideSampleDatabase(
+    fun provideJeongYookGakDatabase(
         @ApplicationContext context: Context
-    ): SampleDataBae = Room
-        .databaseBuilder(context, SampleDataBae::class.java, name)
+    ): JeongYookGakDataBase = Room
+        .databaseBuilder(context, JeongYookGakDataBase::class.java, name)
         .build()
+
+    @Provides
+    @Singleton
+    fun provideProductionsDao(dataBase: JeongYookGakDataBase): ProductionsDao {
+        return dataBase.productionsDao()
+    }
 }
+
+
+

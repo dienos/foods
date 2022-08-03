@@ -1,12 +1,12 @@
 package com.jeongyookgak.jth.presentation.di
 
+import com.jeongyookgak.jth.data.api.ProductionService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import com.jeongyookgak.jth.data.api.SampleService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -19,7 +19,7 @@ internal object ApiModule {
     private const val CONNECT_TIMEOUT = 15L
     private const val WRITE_TIMEOUT = 15L
     private const val READ_TIMEOUT = 15L
-    private const val BASE_URL = "https://api.github.com/"
+    private const val BASE_URL = "https://091d0619-b76d-402f-9e9b-17449c3f2029.mock.pstmn.io/prod/"
 
 
     @Provides
@@ -48,7 +48,7 @@ internal object ApiModule {
 
     @Provides
     @Singleton
-    fun provideDeliveryService(retrofit: Retrofit): SampleService {
-        return retrofit.create(SampleService::class.java)
+    fun provideDeliveryService(retrofit: Retrofit): ProductionService {
+        return retrofit.create(ProductionService::class.java)
     }
 }

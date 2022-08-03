@@ -1,5 +1,6 @@
 package com.jeongyookgak.jth.domain.model.remote
 
-interface SampleRepo {
+interface Category {
+    val key : String
     val name : String
 }
