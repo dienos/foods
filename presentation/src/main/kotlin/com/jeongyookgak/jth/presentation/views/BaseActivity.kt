@@ -5,12 +5,16 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import com.jeongyookgak.jth.presentation.util.NetworkUtil
+import javax.inject.Inject
 
 abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
     @LayoutRes
     abstract fun getLayoutResId(): Int
     abstract fun initializeViewModel()
     abstract fun initializeUiEvent()
+
+    @Inject lateinit var networkUtil: NetworkUtil
 
     var binding: T? = null
         private set
@@ -26,5 +30,10 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         binding = null
+    }
+
+    override fun onStop() {
+        super.onStop()
+        networkUtil.terminateNetworkCallback()
     }
 }

@@ -7,7 +7,8 @@ import com.jeongyookgak.jth.presentation.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<MainActivityBinding>() {
+class MainActivity :
+    BaseActivity<MainActivityBinding>() {
     private val _viewModel: MainViewModel by viewModels()
     private val viewModel: MainViewModel
         get() = _viewModel

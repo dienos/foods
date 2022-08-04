@@ -8,8 +8,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import com.jeongyookgak.jth.data.db.JeongYookGakDataBase
-import com.jeongyookgak.jth.data.db.converter.CategoryListConverter
-import com.jeongyookgak.jth.data.db.converter.ProductionListConverter
 import com.jeongyookgak.jth.data.db.dao.ProductionsDao
 import javax.inject.Singleton
 

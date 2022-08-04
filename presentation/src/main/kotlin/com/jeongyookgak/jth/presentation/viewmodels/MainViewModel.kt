@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.jeongyookgak.jth.domain.model.local.LocalProduction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import com.jeongyookgak.jth.domain.model.local.LocalSampleRepo
 import com.jeongyookgak.jth.domain.model.remote.ProductionsRepo
 import com.jeongyookgak.jth.domain.usecase.GetLocalSampleUseCase
 import com.jeongyookgak.jth.domain.usecase.GetProductionsUseCase
