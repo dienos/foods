@@ -17,7 +17,7 @@ class MainViewModel @Inject constructor(
     private val getLocalProductionUseCase: GetLocalSampleUseCase,
 ) : BaseViewModel() {
 
-    var ProductionsData = MutableLiveData<List<ProductionsRepo>>()
+    var ProductionsData = MutableLiveData<ProductionsRepo>()
 
     private var _productionLocalData = MutableLiveData<List<LocalProduction>>()
 

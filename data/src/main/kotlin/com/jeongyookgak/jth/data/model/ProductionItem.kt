@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 import com.jeongyookgak.jth.domain.model.remote.Production
 
 data class ProductionItem(
-    @SerializedName("categoryKey")
-    val _categoryKey: String,
-
     @SerializedName("key")
     val _key: String,
+
+    @SerializedName("categoryKey")
+    val _categoryKey: String,
 
     @SerializedName("name")
     val _name: String,

@@ -5,5 +5,5 @@ import retrofit2.http.GET
 
 interface ProductionService {
     @GET(PRODUCTION_LIST_URL)
-    suspend fun getProductions() : List<ProductionsRepoRes>
+    suspend fun getProductions() : ProductionsRepoRes
 }

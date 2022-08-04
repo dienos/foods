@@ -8,5 +8,5 @@ import javax.inject.Inject
 class ProductionsRepositoryImpl @Inject constructor(
     private val remoteSource: ProductionsRemoteSource,
 ) : ProductionsRepository {
-    override suspend fun getProductions(): List<ProductionsRepo> = remoteSource.getProductions()
+    override suspend fun getProductions(): ProductionsRepo = remoteSource.getProductions()
 }
