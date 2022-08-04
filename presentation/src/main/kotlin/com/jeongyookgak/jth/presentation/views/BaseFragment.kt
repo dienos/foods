@@ -16,6 +16,7 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
     @LayoutRes
     abstract fun getLayoutResId(): Int
     abstract fun initializeViewModel()
+    abstract fun initializeUiEvent()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,5 +30,6 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeViewModel()
+        initializeUiEvent()
     }
 }

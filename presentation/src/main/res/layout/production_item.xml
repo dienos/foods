@@ -27,9 +27,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
+            android:id="@+id/favorite_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:checked="@{production_item.isFavorite}"
             android:text="@string/like"
             app:layout_constraintTop_toTopOf="parent" />
 

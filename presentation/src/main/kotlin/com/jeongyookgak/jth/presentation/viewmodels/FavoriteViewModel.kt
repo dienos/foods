@@ -4,24 +4,38 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.jeongyookgak.jth.data.api.RESULT_OK
-import com.jeongyookgak.jth.data.model.CategoryData
 import com.jeongyookgak.jth.data.model.ProductionData
 import com.jeongyookgak.jth.domain.model.remote.Production
+import com.jeongyookgak.jth.domain.model.remote.ProductionsRepo
 import com.jeongyookgak.jth.domain.usecase.GetProductionsUseCase
 import com.jeongyookgak.jth.presentation.R
 import com.jeongyookgak.jth.presentation.di.PreferencesUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductionViewModel @Inject constructor(
+class FavoriteViewModel @Inject constructor(
     app: Application,
     private val getProductionsUseCase: GetProductionsUseCase
 ) : BaseViewModel(app) {
-    private var productionDataByFiller: List<Production> = arrayListOf()
     val productionData = MutableLiveData<ProductionData>()
-    val categoryData = MutableLiveData<CategoryData>()
+
+    private fun getOnlyFavoriteData(
+        remoteData: ArrayList<Production>,
+        localFavoriteData: ArrayList<String>?
+    ): List<Production> {
+        val result: List<Production>
+
+        val joinData = joinFavoriteData(remoteData, localFavoriteData)
+
+        result = joinData.filter {
+            it.isFavorite
+        }
+
+        return result
+    }
 
     private fun joinFavoriteData(
         remoteData: ArrayList<Production>,
@@ -44,40 +58,19 @@ class ProductionViewModel @Inject constructor(
         return result
     }
 
-    fun getProductionsByCategory(key: String) {
-        val list = productionDataByFiller.filter {
-            it.categoryKey == key
-        }
-
-        productionData.value = ProductionData(
-            joinFavoriteData(
-                list as ArrayList<Production>,
-                PreferencesUtil.getStringArrayPref(app) as ArrayList<String>
-            )
-        )
-    }
-
-    fun getProductions() {
+     fun getFavorite() {
         try {
             updateProgress(true)
-
             viewModelScope.launch {
                 val response = getProductionsUseCase.invoke()
 
                 if (response.code == RESULT_OK) {
-                    categoryData.value = CategoryData(response.categories)
-
                     productionData.value = ProductionData(
-                        joinFavoriteData(
+                        getOnlyFavoriteData(
                             response.productions as ArrayList<Production>,
                             PreferencesUtil.getStringArrayPref(app) as ArrayList<String>
                         )
                     )
-
-                    productionData.value?.list?.let {
-                        productionDataByFiller = it
-                    }
-
                 }
             }
 
@@ -88,5 +81,7 @@ class ProductionViewModel @Inject constructor(
                 updateToast(it)
             } ?: updateToast(app.getString(R.string.network_error))
         }
+
+
     }
 }

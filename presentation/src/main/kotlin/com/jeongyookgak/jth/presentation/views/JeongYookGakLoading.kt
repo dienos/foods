@@ -13,7 +13,7 @@ import com.jeongyookgak.jth.presentation.R
 import com.jeongyookgak.jth.presentation.databinding.ProgressBarBinding
 import javax.inject.Inject
 
-class JeongYookGakLoading @Inject constructor(context: Context) {
+class JeongYookGakLoading @Inject constructor(activity: Activity) {
     private var binding : ProgressBarBinding ?= null
     private var dialog: CustomDialog
 
@@ -27,14 +27,14 @@ class JeongYookGakLoading @Inject constructor(context: Context) {
     }
 
     init {
-        binding = ProgressBarBinding.inflate((context as Activity).layoutInflater)
+        binding = ProgressBarBinding.inflate(activity.layoutInflater)
 
         setColorFilter(
             binding?.progressCircular?.indeterminateDrawable!!,
-            ResourcesCompat.getColor(context.resources, R.color.black, null)
+            ResourcesCompat.getColor(activity.resources, R.color.black, null)
         )
 
-        dialog = CustomDialog(context)
+        dialog = CustomDialog(activity)
         dialog.setContentView(binding?.root!!)
     }
 

@@ -5,7 +5,7 @@ import com.jeongyookgak.jth.domain.repository.remote.ProductionsRepository
 
 class GetProductionsUseCase(private val repository: ProductionsRepository) {
     suspend operator fun invoke(
-    ): ProductionsRepo {
+    ):  ProductionsRepo {
         return repository.getProductions()
     }
 }

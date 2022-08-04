@@ -9,10 +9,11 @@ import com.jeongyookgak.jth.domain.model.remote.Production
 import com.jeongyookgak.jth.presentation.BR
 import com.jeongyookgak.jth.presentation.JeongYookGakApplication.Companion.favoriteList
 import com.jeongyookgak.jth.presentation.databinding.ProductionItemBinding
-import com.jeongyookgak.jth.presentation.di.PreferencesUtil.setStringArrayPref
+import com.jeongyookgak.jth.presentation.di.PreferencesUtil
 
-class ProductionListAdapter(private val context: Context, private val list: List<Production>) :
-    RecyclerView.Adapter<ProductionListAdapter.ViewHolder>() {
+class FavoriteListAdapter(private val context: Context,
+                          private val list: List<Production>) :
+    RecyclerView.Adapter<FavoriteListAdapter.ViewHolder>() {
     private lateinit var binding: ProductionItemBinding
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -28,14 +29,14 @@ class ProductionListAdapter(private val context: Context, private val list: List
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         binding.favoriteCheck.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    favoriteList.remove(list[position].key)
-                    favoriteList.add(list[position].key)
-                } else {
-                    favoriteList.remove(list[position].key)
-                }
+            if (isChecked) {
+                favoriteList.remove(list[position].key)
+                favoriteList.add(list[position].key)
+            } else {
+                favoriteList.remove(list[position].key)
+            }
 
-            setStringArrayPref(context, favoriteList)
+            PreferencesUtil.setStringArrayPref(context, favoriteList)
         }
 
         holder.bind(list[position])

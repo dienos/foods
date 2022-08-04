@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken
 object PreferencesUtil {
     private const val name = "jeongYookGak"
 
-    fun setStringArrayPref(context: Context, values: ArrayList<String>) {
+    fun setStringArrayPref(context: Context, values: List<String>) {
         val userLocalData = context.getSharedPreferences(name, Context.MODE_PRIVATE)
         val editor = userLocalData!!.edit()
         editor.clear()
@@ -15,7 +15,7 @@ object PreferencesUtil {
 
         val gson = GsonBuilder().create()
         val listType = object : TypeToken<MutableList<String>>() {}
-        val str = gson.toJson(String, listType.type)
+        val str = gson.toJson(values, listType.type)
         editor.putString(name, str)
         editor.apply()
     }

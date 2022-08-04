@@ -3,6 +3,7 @@ package com.jeongyookgak.jth.presentation.views
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jeongyookgak.jth.presentation.R
 import com.jeongyookgak.jth.presentation.databinding.MainActivityBinding
