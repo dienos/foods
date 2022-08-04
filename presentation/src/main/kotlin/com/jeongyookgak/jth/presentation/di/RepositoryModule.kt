@@ -4,9 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import com.jeongyookgak.jth.data.repository.LocalProductionRepositoryImpl
 import com.jeongyookgak.jth.data.repository.ProductionsRepositoryImpl
-import com.jeongyookgak.jth.domain.repository.local.LocalProductionRepository
 import com.jeongyookgak.jth.domain.repository.remote.ProductionsRepository
 import javax.inject.Singleton
 
@@ -17,8 +15,4 @@ abstract class RepositoryModule {
     @Singleton
     @Binds
     abstract fun bindProductionsRepository(repository: ProductionsRepositoryImpl): ProductionsRepository
-
-    @Singleton
-    @Binds
-    abstract fun bindLocalSampleRepository(repository: LocalProductionRepositoryImpl): LocalProductionRepository
 }

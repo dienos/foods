@@ -14,8 +14,16 @@ data class ProductionItem(
     val _name: String,
 
     @SerializedName("price")
-    val _price: String
+    val _price: String,
+
+    var _isFavorite: Boolean
 ) : Production {
+    override var isFavorite: Boolean
+        get() = _isFavorite
+        set(value) {
+            _isFavorite = value
+        }
+
     override val categoryKey: String
         get() = _categoryKey
 

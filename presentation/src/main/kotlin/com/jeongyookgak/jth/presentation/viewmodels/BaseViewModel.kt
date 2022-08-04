@@ -1,10 +1,11 @@
 package com.jeongyookgak.jth.presentation.viewmodels
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-open class BaseViewModel : ViewModel() {
+open class BaseViewModel(val app : Application) : AndroidViewModel(app) {
     private val _progress = MutableStateFlow(false)
     val progressFlow = _progress.asStateFlow()
 

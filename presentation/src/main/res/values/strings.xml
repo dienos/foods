@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">정육각 데모</string>
     <string name="confirm">확인</string>
+    <string name="like">좋아요</string>
+    <string name="production">제품</string>
     <string name="network_error">네트워크에 연결 되지 않았습니다.\n네트워크 상태를 확인 해주세요.</string>
 </resources>

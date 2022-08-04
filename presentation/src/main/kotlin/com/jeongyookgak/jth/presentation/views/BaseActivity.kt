@@ -13,6 +13,7 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
     abstract fun getLayoutResId(): Int
     abstract fun initializeViewModel()
     abstract fun initializeUiEvent()
+    abstract fun initializeView()
 
     @Inject lateinit var networkUtil: NetworkUtil
 
@@ -24,6 +25,7 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, getLayoutResId())
         initializeViewModel()
+        initializeView()
         initializeUiEvent()
     }
 

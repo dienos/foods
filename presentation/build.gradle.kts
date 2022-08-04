@@ -75,6 +75,10 @@ dependencies {
 
     implementation(Config.Android.Splash.splashScreen)
 
+    implementation(Config.Android.recyclerView)
+
+    implementation(Config.Android.viewpager2)
+
     implementation(Config.Android.core)
     implementation( Config.Android.appcompat)
     implementation( Config.Android.material)
