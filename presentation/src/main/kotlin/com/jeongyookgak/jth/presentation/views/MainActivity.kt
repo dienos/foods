@@ -40,7 +40,6 @@ class MainActivity : BaseActivity<MainActivityBinding>() {
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = this
         viewModel.setTabData()
-        viewModel.getCategories()
     }
 
     override fun initializeUiEvent() {

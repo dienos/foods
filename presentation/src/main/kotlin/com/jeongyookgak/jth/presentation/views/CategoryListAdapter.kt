@@ -8,18 +8,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jeongyookgak.jth.domain.model.remote.Category
 import com.jeongyookgak.jth.presentation.BR
 import com.jeongyookgak.jth.presentation.databinding.CategoryItemBinding
+import com.jeongyookgak.jth.presentation.viewmodels.ProductionViewModel
 
-class CategoryListAdapter(private val context : Context, private val list: List<Category>) : RecyclerView.Adapter<CategoryListAdapter.ViewHolder>() {
-    private lateinit var  binding : CategoryItemBinding
+class CategoryListAdapter(
+    private val context: Context,
+    private val viewModel: ProductionViewModel,
+    private val list: List<Category>
+) : RecyclerView.Adapter<CategoryListAdapter.ViewHolder>() {
+    private lateinit var binding: CategoryItemBinding
 
-    inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item : Category) {
-            binding.setVariable(BR.category_item, item)
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: Category) {
+            binding.setVariable(BR.categoryItem, item)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        binding  = CategoryItemBinding.inflate(LayoutInflater.from(context), parent, false)
+        binding = CategoryItemBinding.inflate(LayoutInflater.from(context), parent, false)
+        binding.setVariable(BR.viewModel, viewModel)
         return ViewHolder(binding.root)
     }
 

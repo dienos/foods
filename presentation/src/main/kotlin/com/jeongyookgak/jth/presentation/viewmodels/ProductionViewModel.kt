@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.jeongyookgak.jth.data.api.RESULT_OK
+import com.jeongyookgak.jth.data.model.CategoryData
 import com.jeongyookgak.jth.data.model.ProductionData
 import com.jeongyookgak.jth.data.model.ProductionItem
 import com.jeongyookgak.jth.domain.model.remote.Production
@@ -19,7 +20,9 @@ class ProductionViewModel @Inject constructor(
     app: Application,
     private val getProductionsUseCase: GetProductionsUseCase
 ) : BaseViewModel(app) {
-    val ProductionData = MutableLiveData<ProductionData>()
+    var productionDataByFiller : List<Production> = arrayListOf()
+    val productionData = MutableLiveData<ProductionData>()
+    val categoryData = MutableLiveData<CategoryData>()
 
     private fun joinFavoriteData(
         remoteData: List<Production>,
@@ -49,18 +52,33 @@ class ProductionViewModel @Inject constructor(
         return result
     }
 
+    fun getProductionsByCategory(key : String) {
+        val list = productionDataByFiller.filter {
+            it.categoryKey == key
+        }
+
+        productionData.value = ProductionData(list)
+    }
+
     fun getProductions() {
         try {
             viewModelScope.launch {
                 val response = getProductionsUseCase.invoke()
 
                 if (response.code == RESULT_OK) {
-                    ProductionData.value = ProductionData(
+                    categoryData.value = CategoryData(response.categories)
+
+                    productionData.value = ProductionData(
                         joinFavoriteData(
                             response.productions,
                             PreferencesUtil.getStringArrayPref(app)
                         )
                     )
+
+                    productionData.value?.list?.let {
+                        productionDataByFiller = it
+                    }
+
                 }
             }
         } catch (e: Exception) {

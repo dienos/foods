@@ -7,14 +7,15 @@ import com.google.android.material.tabs.TabLayout
 import com.jeongyookgak.jth.data.model.Tab
 import com.jeongyookgak.jth.domain.model.remote.Category
 import com.jeongyookgak.jth.domain.model.remote.Production
+import com.jeongyookgak.jth.presentation.viewmodels.ProductionViewModel
 import com.jeongyookgak.jth.presentation.views.CategoryListAdapter
 import com.jeongyookgak.jth.presentation.views.ProductionListAdapter
 
 
-@BindingAdapter(value = ["categories"])
-fun setCategoryList(view: RecyclerView, list: List<Category>?) {
+@BindingAdapter(value = ["categories", "viewModel"])
+fun setCategoryList(view: RecyclerView, list: List<Category>?, viewModel : ProductionViewModel) {
     list?.let {
-        CategoryListAdapter(view.context, list).apply {
+        CategoryListAdapter(view.context, viewModel, list).apply {
             view.adapter = this
             view.layoutManager = LinearLayoutManager(view.context)
             view.layoutManager = LinearLayoutManager(
