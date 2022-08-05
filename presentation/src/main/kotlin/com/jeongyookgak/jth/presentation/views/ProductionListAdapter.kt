@@ -10,8 +10,13 @@ import com.jeongyookgak.jth.presentation.BR
 import com.jeongyookgak.jth.presentation.JeongYookGakApplication.Companion.favoriteList
 import com.jeongyookgak.jth.presentation.databinding.ProductionItemBinding
 import com.jeongyookgak.jth.presentation.di.PreferencesUtil.setStringArrayPref
+import com.jeongyookgak.jth.presentation.viewmodels.ProductionViewModel
 
-class ProductionListAdapter(private val context: Context, private val list: List<Production>) :
+class ProductionListAdapter(
+    private val context: Context,
+    private val viewModel: ProductionViewModel,
+    private val list: List<Production>
+) :
     RecyclerView.Adapter<ProductionListAdapter.ViewHolder>() {
     private lateinit var binding: ProductionItemBinding
 
@@ -28,12 +33,17 @@ class ProductionListAdapter(private val context: Context, private val list: List
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         binding.favoriteCheck.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    favoriteList.remove(list[position].key)
-                    favoriteList.add(list[position].key)
-                } else {
+            if (isChecked) {
+                if(favoriteList.isNotEmpty()) {
                     favoriteList.remove(list[position].key)
                 }
+
+                favoriteList.add(list[position].key)
+            } else {
+                if(favoriteList.isNotEmpty()) {
+                    favoriteList.remove(list[position].key)
+                }
+            }
 
             setStringArrayPref(context, favoriteList)
         }

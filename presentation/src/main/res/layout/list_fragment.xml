@@ -39,7 +39,9 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="parent"
-                app:productions="@{viewModel.productionData.list}" />
+                app:productions="@{viewModel.productionData.list}"
+                app:viewModel="@{viewModel}"
+                />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

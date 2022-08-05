@@ -6,17 +6,14 @@ import com.jeongyookgak.jth.domain.model.remote.Production
 import com.jeongyookgak.jth.domain.model.remote.ProductionsRepo
 
 data class ProductionsRepoRes(
-    @SerializedName("code")
-    private val _code : String,
-
     @SerializedName("categories")
     private val _categories: List<CategoryItem>,
 
     @SerializedName("productions")
-    private val _productions: List<ProductionItem>) : ProductionsRepo {
+    private val _productions: List<ProductionItem>,
 
-    override val code: String
-        get() = _code
+    @SerializedName("error")
+    private val error: ErrorResponse) : ProductionsRepo {
 
     override val categories: List<Category>
         get() = _categories

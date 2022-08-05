@@ -24,6 +24,10 @@ class ListFragment : BaseFragment<ListFragmentBinding>() {
         binding?.lifecycleOwner = this
         binding?.viewModel = viewModel
         progress = JeongYookGakLoading(activity!!)
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.getProductions()
     }
 

@@ -8,7 +8,10 @@ data class CategoryItem(
     val _key: String,
 
     @SerializedName("name")
-    val _name: String
+    val _name: String,
+
+    @SerializedName("order")
+    val _order: Int
 ) : Category {
 
     override val key: String
@@ -16,4 +19,7 @@ data class CategoryItem(
 
     override val name: String
         get() = _name
+
+    override val order: Int
+        get() = _order
 }

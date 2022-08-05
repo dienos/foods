@@ -3,7 +3,6 @@ package com.jeongyookgak.jth.presentation.viewmodels
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.jeongyookgak.jth.data.api.RESULT_OK
 import com.jeongyookgak.jth.data.model.CategoryData
 import com.jeongyookgak.jth.data.model.ProductionData
 import com.jeongyookgak.jth.domain.model.remote.Production
@@ -19,7 +18,7 @@ class ProductionViewModel @Inject constructor(
     app: Application,
     private val getProductionsUseCase: GetProductionsUseCase
 ) : BaseViewModel(app) {
-    private var productionDataByFiller: List<Production> = arrayListOf()
+    private var productionDataByFiller: ArrayList<Production> = arrayListOf()
     val productionData = MutableLiveData<ProductionData>()
     val categoryData = MutableLiveData<CategoryData>()
 
@@ -27,15 +26,12 @@ class ProductionViewModel @Inject constructor(
         remoteData: ArrayList<Production>,
         localFavoriteData: ArrayList<String>?
     ): List<Production> {
-        val result: ArrayList<Production> = remoteData
+        val result = arrayListOf<Production>()
+        result.addAll(remoteData)
 
-        remoteData.forEach {
-            it.isFavorite = false
-        }
-
-        remoteData.forEachIndexed { index, production ->
+        result.forEachIndexed { index, production ->
             localFavoriteData?.forEach { localKey ->
-                if(production.key == localKey) {
+                if (production.key == localKey) {
                     result[index].isFavorite = true
                 }
             }
@@ -58,35 +54,35 @@ class ProductionViewModel @Inject constructor(
     }
 
     fun getProductions() {
-        try {
-            updateProgress(true)
+        updateProgress(true)
 
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 val response = getProductionsUseCase.invoke()
 
-                if (response.code == RESULT_OK) {
-                    categoryData.value = CategoryData(response.categories)
+                categoryData.value = CategoryData(response.categories)
 
+                productionDataByFiller.clear()
+                productionDataByFiller.addAll(response.productions)
+
+                PreferencesUtil.getStringArrayPref(app)?.let {
                     productionData.value = ProductionData(
                         joinFavoriteData(
                             response.productions as ArrayList<Production>,
                             PreferencesUtil.getStringArrayPref(app) as ArrayList<String>
                         )
                     )
-
-                    productionData.value?.list?.let {
-                        productionDataByFiller = it
-                    }
-
+                }?: run {
+                    productionData.value = ProductionData(response.productions)
                 }
-            }
 
-            updateProgress(false)
-        } catch (e: Exception) {
-            e.message?.let {
                 updateProgress(false)
-                updateToast(it)
-            } ?: updateToast(app.getString(R.string.network_error))
+            } catch (e: Exception) {
+                e.message?.let {
+                    updateProgress(false)
+                    updateToast(it)
+                } ?: updateToast(app.getString(R.string.network_error))
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ internal object ApiModule {
     private const val CONNECT_TIMEOUT = 15L
     private const val WRITE_TIMEOUT = 15L
     private const val READ_TIMEOUT = 15L
-    private const val BASE_URL = "https://091d0619-b76d-402f-9e9b-17449c3f2029.mock.pstmn.io/prod/"
+    private const val BASE_URL = " https://android-test.yookgak.com/"
 
 
     @Provides
