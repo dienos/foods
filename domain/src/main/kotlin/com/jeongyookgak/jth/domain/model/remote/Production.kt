@@ -8,5 +8,4 @@ interface Production {
     val price : String
     val thumbnail : String
     val order : Int
-
 }

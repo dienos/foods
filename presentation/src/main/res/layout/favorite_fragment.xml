@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
+            android:nestedScrollingEnabled="true"
             app:layout_constraintTop_toBottomOf="parent"
             app:favorites="@{viewModel.productionData.list}"
             app:viewModel="@{viewModel}"/>

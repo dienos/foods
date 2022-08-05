@@ -1,14 +1,18 @@
 package com.jeongyookgak.jth.presentation.views
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.jeongyookgak.jth.data.model.ProductionItem
 import com.jeongyookgak.jth.domain.model.remote.Production
 import com.jeongyookgak.jth.presentation.BR
+import com.jeongyookgak.jth.presentation.JeongYookGakApplication
+import com.jeongyookgak.jth.presentation.JeongYookGakApplication.Companion.controlFavoriteList
 import com.jeongyookgak.jth.presentation.JeongYookGakApplication.Companion.favoriteList
 import com.jeongyookgak.jth.presentation.databinding.FavoriteItemBinding
 import com.jeongyookgak.jth.presentation.di.PreferencesUtil
@@ -28,7 +32,6 @@ class FavoriteListAdapter(
         (list as ArrayList).clear()
         list.addAll(productions)
         diffResult.dispatchUpdatesTo(this)
-
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -78,20 +81,24 @@ class FavoriteListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         binding.favoriteCheck.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                if(favoriteList.isEmpty().not()) {
-                    favoriteList.remove(list[position].key)
-                }
+            controlFavoriteList(
+                context = context,
+                isChecked = isChecked,
+                data = list[position]
+            )
 
-                favoriteList.add(list[position].key)
-            } else {
-                if(favoriteList.isEmpty().not()) {
-                    favoriteList.remove(list[position].key)
-                }
-            }
-
-            PreferencesUtil.setStringArrayPref(context, favoriteList)
             viewModel.getFavorite()
+        }
+
+        binding.itemRoot.setOnClickListener {
+            if(list.isNotEmpty()) {
+                val item = list[position] as ProductionItem
+
+                item.isFavorite = true
+                val intent = Intent(context, ProductionDetailActivity::class.java)
+                intent.putExtra(ListFragment.PUT_EXTRA_DETAIL, item)
+                context.startActivity(intent)
+            }
         }
 
         holder.bind(list[position])

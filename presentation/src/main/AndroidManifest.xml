@@ -34,6 +34,12 @@
             android:theme="@style/Theme.JeongYookGak">
         </activity>
 
+        <activity
+            android:name=".views.ProductionDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.JeongYookGak">
+        </activity>
+
 
     </application>
 </manifest>

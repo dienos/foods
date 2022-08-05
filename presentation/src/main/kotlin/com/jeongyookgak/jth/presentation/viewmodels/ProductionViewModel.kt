@@ -21,6 +21,7 @@ class ProductionViewModel @Inject constructor(
     private var productionDataByFiller: ArrayList<Production> = arrayListOf()
     val productionData = MutableLiveData<ProductionData>()
     val categoryData = MutableLiveData<CategoryData>()
+    var currentCategory = ""
 
     private fun joinFavoriteData(
         remoteData: ArrayList<Production>,
@@ -41,6 +42,8 @@ class ProductionViewModel @Inject constructor(
     }
 
     fun getProductionsByCategory(key: String) {
+        currentCategory = key
+
         val list = productionDataByFiller.filter {
             it.categoryKey == key
         }
@@ -72,7 +75,7 @@ class ProductionViewModel @Inject constructor(
                             PreferencesUtil.getStringArrayPref(app) as ArrayList<String>
                         )
                     )
-                }?: run {
+                } ?: run {
                     productionData.value = ProductionData(response.productions)
                 }
 

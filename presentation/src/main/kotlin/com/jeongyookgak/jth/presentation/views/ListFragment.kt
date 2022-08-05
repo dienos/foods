@@ -1,5 +1,6 @@
 package com.jeongyookgak.jth.presentation.views
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -10,8 +11,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+
+
 @AndroidEntryPoint
 class ListFragment : BaseFragment<ListFragmentBinding>() {
+    companion object {
+        const val PUT_EXTRA_DETAIL = "put_extra_detail"
+    }
+
     private lateinit var progress: JeongYookGakLoading
 
     private val _viewModel: ProductionViewModel by viewModels()
@@ -28,7 +35,11 @@ class ListFragment : BaseFragment<ListFragmentBinding>() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.getProductions()
+        if(viewModel.currentCategory.isEmpty()) {
+            viewModel.getProductions()
+        } else {
+            viewModel.getProductionsByCategory(viewModel.currentCategory)
+        }
     }
 
     override fun initializeUiEvent() {

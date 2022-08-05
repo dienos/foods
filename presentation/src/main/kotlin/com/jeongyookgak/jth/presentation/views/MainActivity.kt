@@ -3,7 +3,6 @@ package com.jeongyookgak.jth.presentation.views
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jeongyookgak.jth.presentation.R
 import com.jeongyookgak.jth.presentation.databinding.MainActivityBinding
@@ -18,15 +17,18 @@ class MainActivity : BaseActivity<MainActivityBinding>() {
     private val viewModel: MainViewModel
         get() = _viewModel
 
-    private lateinit var progress : JeongYookGakLoading
+    private lateinit var progress: JeongYookGakLoading
 
     override fun getLayoutResId(): Int = R.layout.main_activity
 
 
     override fun initializeView() {
+        progress = JeongYookGakLoading(this)
+
         val viewPager = binding?.viewPager
         val tabLayout = binding?.tabLayout
 
+        viewPager?.isUserInputEnabled = false
         viewPager?.adapter = PagerFragmentStateAdapter(supportFragmentManager, lifecycle)
 
         if(viewPager != null && tabLayout != null) {
