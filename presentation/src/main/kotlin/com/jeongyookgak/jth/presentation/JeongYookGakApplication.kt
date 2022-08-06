@@ -26,6 +26,10 @@ class JeongYookGakApplication : Application() {
 
             PreferencesUtil.setStringArrayPref(context, favoriteList)
         }
+
+        fun setSearchWord(context : Context?, value : String) {
+            PreferencesUtil.setSearchText(context, value)
+        }
     }
 
     override fun onCreate() {

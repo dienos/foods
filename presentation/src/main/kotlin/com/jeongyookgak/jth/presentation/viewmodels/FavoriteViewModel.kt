@@ -9,6 +9,7 @@ import com.jeongyookgak.jth.domain.model.remote.Production
 import com.jeongyookgak.jth.domain.usecase.GetProductionsUseCase
 import com.jeongyookgak.jth.presentation.R
 import com.jeongyookgak.jth.presentation.di.PreferencesUtil
+import com.jeongyookgak.jth.presentation.util.text.KoreanTextMatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,7 +20,10 @@ class FavoriteViewModel @Inject constructor(
     private val getProductionsUseCase: GetProductionsUseCase
 ) : BaseViewModel(app) {
     val favoriteData = MutableLiveData<ProductionData>()
-    private var productionDataByFiller: List<Production> = arrayListOf()
+    val searchText = MutableLiveData("")
+    var productionDataByFiller: List<Production> = arrayListOf()
+
+    private val searchList : ArrayList<Production> = arrayListOf()
 
     private fun getOnlyFavoriteData(
         remoteData: ArrayList<Production>,
@@ -53,6 +57,26 @@ class FavoriteViewModel @Inject constructor(
         }
 
         return result
+    }
+
+    fun findSearWord(searchWord : String) {
+        val list = favoriteData.value?.list
+        searchList.clear()
+
+        list?.forEach {
+            val matcher = KoreanTextMatcher(searchWord)
+            val match = matcher.match(it.name)
+
+            if (match.success()) {
+                searchList.add(it)
+            }
+        }
+    }
+
+    fun updateSearchLiveData() {
+        val list : ArrayList<Production> = arrayListOf()
+        list.addAll(searchList)
+        favoriteData.value = ProductionData(list)
     }
 
     private fun updateProductionLiveData(data: List<Production>) {

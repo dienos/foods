@@ -16,6 +16,7 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
     @LayoutRes
     abstract fun getLayoutResId(): Int
     abstract fun initializeViewModel()
+    abstract fun initializeView()
     abstract fun initializeUiEvent()
 
     override fun onCreateView(
@@ -31,5 +32,6 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeViewModel()
         initializeUiEvent()
+        initializeView()
     }
 }

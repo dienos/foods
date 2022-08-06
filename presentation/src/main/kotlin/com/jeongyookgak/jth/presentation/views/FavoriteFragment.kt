@@ -1,14 +1,20 @@
 package com.jeongyookgak.jth.presentation.views
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.jeongyookgak.jth.presentation.JeongYookGakApplication.Companion.setSearchWord
 import com.jeongyookgak.jth.presentation.R
 import com.jeongyookgak.jth.presentation.databinding.FavoriteFragmentBinding
+import com.jeongyookgak.jth.presentation.di.PreferencesUtil.getSearchText
+import com.jeongyookgak.jth.presentation.di.PreferencesUtil.setSearchText
 import com.jeongyookgak.jth.presentation.viewmodels.FavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class FavoriteFragment : BaseFragment<FavoriteFragmentBinding>() {
@@ -23,12 +29,20 @@ class FavoriteFragment : BaseFragment<FavoriteFragmentBinding>() {
     override fun initializeViewModel() {
         binding?.lifecycleOwner = this
         binding?.viewModel = viewModel
+        viewModel.searchText.value = getSearchText(activity)
         progress = JeongYookGakLoading(activity!!)
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.getFavorite()
+        val searchText = getSearchText(activity)
+
+        if (searchText.isNullOrEmpty()) {
+            viewModel.getFavorite()
+        } else {
+            viewModel.findSearWord(searchText)
+            viewModel.updateSearchLiveData()
+        }
     }
 
     override fun initializeUiEvent() {
@@ -45,5 +59,24 @@ class FavoriteFragment : BaseFragment<FavoriteFragmentBinding>() {
                 Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun initializeView() {
+        binding?.productionSearch?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString().isEmpty()) {
+                    viewModel.getFavorite()
+                } else {
+                    viewModel.findSearWord(s.toString())
+                    viewModel.updateSearchLiveData()
+                }
+
+                setSearchWord(context, s.toString())
+            }
+        })
     }
 }

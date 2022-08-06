@@ -89,11 +89,11 @@ class ProductionListAdapter(
                 data = list[position]
             )
 
-            if (viewModel.currentCategory.isEmpty()) {
+            /*if (viewModel.currentCategory.isEmpty()) {
                 viewModel.getProductions()
             } else {
                 viewModel.getProductionsByCategory(viewModel.currentCategory, false)
-            }
+            }*/
         }
 
         binding.itemRoot.setOnClickListener {

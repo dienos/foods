@@ -31,34 +31,17 @@ fun setCategoryList(view: RecyclerView, list: List<Category>?, viewModel: Produc
     }
 }
 
-private fun setProductionListAdapter(
-    view: RecyclerView,
-    list: List<Production>?,
-    viewModel: ProductionViewModel
-) {
-    ProductionListAdapter(view.context, list!!, viewModel).apply {
-        view.adapter = this
-        view.layoutManager = LinearLayoutManager(view.context)
-        view.layoutManager = LinearLayoutManager(
-            view.context,
-            RecyclerView.VERTICAL,
-            false
-        )
-    }
-}
-
 @BindingAdapter(value = ["productions", "viewModel"])
 fun setProductionList(view: RecyclerView, list: List<Production>?, viewModel: ProductionViewModel) {
     list?.let {
-        view.adapter?.apply {
-            if(viewModel.isCategoryClicked) {
-                setProductionListAdapter(view, list, viewModel)
-            } else {
-                (this as ProductionListAdapter).updateProductions(list)
-            }
-
-        } ?: run {
-            setProductionListAdapter(view, list, viewModel)
+        ProductionListAdapter(view.context, list!!, viewModel).apply {
+            view.adapter = this
+            view.layoutManager = LinearLayoutManager(view.context)
+            view.layoutManager = LinearLayoutManager(
+                view.context,
+                RecyclerView.VERTICAL,
+                false
+            )
         }
     }
 }

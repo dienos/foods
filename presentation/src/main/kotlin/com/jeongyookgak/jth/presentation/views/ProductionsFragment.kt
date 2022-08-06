@@ -58,4 +58,6 @@ class ProductionsFragment : BaseFragment<ProductionsFragmentBinding>() {
             }
         }
     }
+
+    override fun initializeView() {}
 }
