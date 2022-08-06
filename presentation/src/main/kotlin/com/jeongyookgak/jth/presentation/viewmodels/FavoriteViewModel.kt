@@ -56,12 +56,18 @@ class FavoriteViewModel @Inject constructor(
     }
 
     private fun updateProductionLiveData(data: List<Production>) {
-        productionData.value = ProductionData(
-            getOnlyFavoriteData(
-                data as ArrayList<Production>,
-                PreferencesUtil.getStringArrayPref(app) as ArrayList<String>
+        PreferencesUtil.getStringArrayPref(app)?.let {
+            productionData.value = ProductionData(
+                getOnlyFavoriteData(
+                    data as ArrayList<Production>,
+                    PreferencesUtil.getStringArrayPref(app) as ArrayList<String>
+                )
             )
-        )
+        } ?: run {
+            productionData.value = ProductionData(
+                data as ArrayList<Production>
+            )
+        }
     }
 
     fun getFavorite() {

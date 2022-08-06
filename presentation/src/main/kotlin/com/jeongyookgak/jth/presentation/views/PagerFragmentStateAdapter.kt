@@ -10,7 +10,7 @@ class PagerFragmentStateAdapter(fragmentManager: FragmentManager, lifecycle: Lif
     var fragments: ArrayList<Fragment> = ArrayList()
 
     init {
-        fragments.add(ListFragment())
+        fragments.add(ProductionsFragment())
         fragments.add(FavoriteFragment())
     }
 

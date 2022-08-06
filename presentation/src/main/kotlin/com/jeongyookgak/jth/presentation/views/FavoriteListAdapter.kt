@@ -56,7 +56,7 @@ class FavoriteListAdapter(
         }
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition].key === newList[newItemPosition].key
+            return oldList[oldItemPosition].key == newList[newItemPosition].key
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

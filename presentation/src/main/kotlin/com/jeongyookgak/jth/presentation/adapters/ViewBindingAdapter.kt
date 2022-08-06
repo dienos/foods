@@ -14,29 +14,35 @@ import com.jeongyookgak.jth.presentation.views.ProductionListAdapter
 @BindingAdapter(value = ["categories", "viewModel"])
 fun setCategoryList(view: RecyclerView, list: List<Category>?, viewModel: ProductionViewModel) {
     list?.let {
-        CategoryListAdapter(view.context, viewModel, list).apply {
-            view.adapter = this
-            view.layoutManager = LinearLayoutManager(view.context)
-            view.layoutManager = LinearLayoutManager(
-                view.context,
-                RecyclerView.HORIZONTAL,
-                false
-            )
+        if(view.adapter == null) {
+            CategoryListAdapter(view.context, viewModel, list).apply {
+                view.adapter = this
+                view.layoutManager = LinearLayoutManager(view.context)
+                view.layoutManager = LinearLayoutManager(
+                    view.context,
+                    RecyclerView.HORIZONTAL,
+                    false
+                )
+            }
         }
     }
 }
 
-@BindingAdapter(value = ["productions", "viewModel"])
-fun setProductionList(view: RecyclerView, list: List<Production>?, viewModel : ProductionViewModel ) {
+@BindingAdapter(value = ["productions"])
+fun setProductionList(view: RecyclerView, list: List<Production>?) {
     list?.let {
-        ProductionListAdapter(view.context, viewModel, list).apply {
-            view.adapter = this
-            view.layoutManager = LinearLayoutManager(view.context)
-            view.layoutManager = LinearLayoutManager(
-                view.context,
-                RecyclerView.VERTICAL,
-                false
-            )
+        view.adapter?.apply {
+            (this as ProductionListAdapter).updateProductions(list)
+        }?: run {
+            ProductionListAdapter(view.context, list).apply {
+                view.adapter = this
+                view.layoutManager = LinearLayoutManager(view.context)
+                view.layoutManager = LinearLayoutManager(
+                    view.context,
+                    RecyclerView.VERTICAL,
+                    false
+                )
+            }
         }
     }
 }
@@ -46,7 +52,7 @@ fun setFavoriteList(view: RecyclerView, list: List<Production>?, viewModel: Favo
     list?.let {
         view.adapter?.apply {
             (this as FavoriteListAdapter).updateProductions(list)
-        }?: run {
+        } ?: run {
             FavoriteListAdapter(view.context, viewModel, list).apply {
                 view.adapter = this
                 view.layoutManager = LinearLayoutManager(view.context)
