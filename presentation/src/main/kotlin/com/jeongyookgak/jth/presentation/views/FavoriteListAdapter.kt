@@ -1,30 +1,43 @@
 package com.jeongyookgak.jth.presentation.views
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.jeongyookgak.jth.data.model.ProductionItem
 import com.jeongyookgak.jth.domain.model.remote.Production
 import com.jeongyookgak.jth.presentation.BR
-import com.jeongyookgak.jth.presentation.JeongYookGakApplication.Companion.controlFavoriteList
 import com.jeongyookgak.jth.presentation.databinding.FavoriteItemBinding
 import com.jeongyookgak.jth.presentation.viewmodels.FavoriteViewModel
-import com.jeongyookgak.jth.presentation.views.ProductionsFragment.Companion.PUT_EXTRA_DETAIL
 
 class FavoriteListAdapter(
     private val context: Context,
     private val viewModel: FavoriteViewModel,
     private val list: List<Production>
-) :
-    RecyclerView.Adapter<FavoriteListAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<FavoriteListAdapter.ViewHolder>() {
     private lateinit var binding: FavoriteItemBinding
+    private var onClickListener: OnClickListener? = null
+    private var onCheckedChangeListener: OnCheckedChangeListener? = null
 
-    fun updateProductions(productions: List<Production>) {
+    interface OnClickListener {
+        fun onClick(item: Production)
+    }
+
+    interface OnCheckedChangeListener {
+        fun onChange(isChecked: Boolean, item : Production)
+    }
+
+    fun setOnClickListener(listener: OnClickListener) {
+        onClickListener = listener
+    }
+
+    fun setOnCheckedChangeListener(listener: OnCheckedChangeListener) {
+        onCheckedChangeListener = listener
+    }
+
+    fun updateFavorite(productions: List<Production>) {
         val diffCallback = DiffCallback(list, productions)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         (list as ArrayList).clear()
@@ -32,13 +45,21 @@ class FavoriteListAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         fun bind(item: Production) {
             binding.setVariable(BR.favorite_item, item)
+
+            view.setOnClickListener {
+                onClickListener?.onClick(item)
+            }
+
+            binding.favoriteCheck.setOnCheckedChangeListener { _, isChecked ->
+                onCheckedChangeListener?.onChange(isChecked, item)
+            }
         }
     }
 
-    private class DiffCallback(oldList: List<Production>, newList: List<Production>) :
+    class DiffCallback(oldList: List<Production>, newList: List<Production>) :
         DiffUtil.Callback() {
         private val oldList: List<Production>
         private val newList: List<Production>
@@ -80,29 +101,6 @@ class FavoriteListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        binding.favoriteCheck.setOnCheckedChangeListener { _, isChecked ->
-            if (list.size > position) {
-                controlFavoriteList(
-                    context = context,
-                    isChecked = isChecked,
-                    data = list[position]
-                )
-            }
-
-            viewModel.getFavorite()
-        }
-
-        binding.itemRoot.setOnClickListener {
-            if (list.isNotEmpty() && list.size > position) {
-                val item = list[position] as ProductionItem
-
-                item.isFavorite = true
-                val intent = Intent(context, ProductionDetailActivity::class.java)
-                intent.putExtra(PUT_EXTRA_DETAIL, item)
-                context.startActivity(intent)
-            }
-        }
-
         holder.bind(list[position])
     }
 
