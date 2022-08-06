@@ -27,6 +27,12 @@ class ProductionListAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: Production) {
             binding.setVariable(BR.production_item, item)
+
+            binding.itemRoot.setOnClickListener {
+                val intent = Intent(context, ProductionDetailActivity::class.java)
+                intent.putExtra(PUT_EXTRA_DETAIL, item as ProductionItem)
+                context.startActivity(intent)
+            }
         }
     }
 
@@ -67,7 +73,7 @@ class ProductionListAdapter(
             val oldItem: Production = oldList[oldItemPosition]
             val newItem: Production = newList[newItemPosition]
 
-           return oldItem.key == newItem.key
+           return oldItem.isFavorite == newItem.isFavorite
         }
 
         @Nullable
@@ -88,18 +94,6 @@ class ProductionListAdapter(
                 isChecked = isChecked,
                 data = list[position]
             )
-
-            /*if (viewModel.currentCategory.isEmpty()) {
-                viewModel.getProductions()
-            } else {
-                viewModel.getProductionsByCategory(viewModel.currentCategory, false)
-            }*/
-        }
-
-        binding.itemRoot.setOnClickListener {
-            val intent = Intent(context, ProductionDetailActivity::class.java)
-            intent.putExtra(PUT_EXTRA_DETAIL, list[position] as ProductionItem)
-            context.startActivity(intent)
         }
 
         holder.bind(list[position])

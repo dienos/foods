@@ -36,7 +36,7 @@ fun setCategoryList(view: RecyclerView, list: List<Category>?, viewModel: Produc
 @BindingAdapter(value = ["productions", "viewModel"])
 fun setProductionList(view: RecyclerView, list: List<Production>?, viewModel: ProductionViewModel) {
     list?.let {
-        ProductionListAdapter(view.context, list!!, viewModel).apply {
+        ProductionListAdapter(view.context, list, viewModel).apply {
             view.adapter = this
             view.layoutManager = LinearLayoutManager(view.context)
             view.layoutManager = LinearLayoutManager(
