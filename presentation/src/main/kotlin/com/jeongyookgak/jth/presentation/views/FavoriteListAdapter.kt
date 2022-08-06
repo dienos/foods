@@ -11,12 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jeongyookgak.jth.data.model.ProductionItem
 import com.jeongyookgak.jth.domain.model.remote.Production
 import com.jeongyookgak.jth.presentation.BR
-import com.jeongyookgak.jth.presentation.JeongYookGakApplication
 import com.jeongyookgak.jth.presentation.JeongYookGakApplication.Companion.controlFavoriteList
-import com.jeongyookgak.jth.presentation.JeongYookGakApplication.Companion.favoriteList
 import com.jeongyookgak.jth.presentation.databinding.FavoriteItemBinding
-import com.jeongyookgak.jth.presentation.di.PreferencesUtil
 import com.jeongyookgak.jth.presentation.viewmodels.FavoriteViewModel
+import com.jeongyookgak.jth.presentation.views.ProductionsFragment.Companion.PUT_EXTRA_DETAIL
 
 class FavoriteListAdapter(
     private val context: Context,
@@ -59,7 +57,9 @@ class FavoriteListAdapter(
         }
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition].key == newList[newItemPosition].key
+            val oldItem: Production = oldList[oldItemPosition]
+            val newItem: Production = newList[newItemPosition]
+            return oldItem.key == newItem.key
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -81,22 +81,24 @@ class FavoriteListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         binding.favoriteCheck.setOnCheckedChangeListener { _, isChecked ->
-            controlFavoriteList(
-                context = context,
-                isChecked = isChecked,
-                data = list[position]
-            )
+            if (list.size > position) {
+                controlFavoriteList(
+                    context = context,
+                    isChecked = isChecked,
+                    data = list[position]
+                )
+            }
 
             viewModel.getFavorite()
         }
 
         binding.itemRoot.setOnClickListener {
-            if(list.isNotEmpty()) {
+            if (list.isNotEmpty() && list.size > position) {
                 val item = list[position] as ProductionItem
 
                 item.isFavorite = true
                 val intent = Intent(context, ProductionDetailActivity::class.java)
-                intent.putExtra(ListFragment.PUT_EXTRA_DETAIL, item)
+                intent.putExtra(PUT_EXTRA_DETAIL, item)
                 context.startActivity(intent)
             }
         }

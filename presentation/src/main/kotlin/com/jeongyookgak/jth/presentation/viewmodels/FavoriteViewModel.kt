@@ -18,7 +18,7 @@ class FavoriteViewModel @Inject constructor(
     app: Application,
     private val getProductionsUseCase: GetProductionsUseCase
 ) : BaseViewModel(app) {
-    val productionData = MutableLiveData<ProductionData>()
+    val favoriteData = MutableLiveData<ProductionData>()
     private var productionDataByFiller: List<Production> = arrayListOf()
 
     private fun getOnlyFavoriteData(
@@ -57,15 +57,11 @@ class FavoriteViewModel @Inject constructor(
 
     private fun updateProductionLiveData(data: List<Production>) {
         PreferencesUtil.getStringArrayPref(app)?.let {
-            productionData.value = ProductionData(
+            favoriteData.value = ProductionData(
                 getOnlyFavoriteData(
                     data as ArrayList<Production>,
                     PreferencesUtil.getStringArrayPref(app) as ArrayList<String>
                 )
-            )
-        } ?: run {
-            productionData.value = ProductionData(
-                data as ArrayList<Production>
             )
         }
     }

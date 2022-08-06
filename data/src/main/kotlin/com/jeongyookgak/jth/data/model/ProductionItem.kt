@@ -23,7 +23,9 @@ data class ProductionItem(
     @SerializedName("order")
     val _order: Int,
 
-    var _isFavorite: Boolean = false
+    var _isFavorite: Boolean = false,
+
+    var _favoriteKey : String = ""
 ) : Production, Serializable {
     override var isFavorite: Boolean
         get() = _isFavorite

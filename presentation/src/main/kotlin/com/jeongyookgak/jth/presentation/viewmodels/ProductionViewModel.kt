@@ -22,6 +22,7 @@ class ProductionViewModel @Inject constructor(
     val productionData = MutableLiveData<ProductionData>()
     val categoryData = MutableLiveData<CategoryData>()
     var currentCategory = ""
+    var isCategoryClicked = false
 
     private fun joinFavoriteData(
         remoteData: ArrayList<Production>,
@@ -29,6 +30,10 @@ class ProductionViewModel @Inject constructor(
     ): List<Production> {
         val result = arrayListOf<Production>()
         result.addAll(remoteData)
+
+        result.forEach {
+            it.isFavorite = false
+        }
 
         result.forEachIndexed { index, production ->
             localFavoriteData?.forEach { localKey ->
@@ -41,19 +46,29 @@ class ProductionViewModel @Inject constructor(
         return result
     }
 
-    fun getProductionsByCategory(key: String) {
+    fun getProductionsByCategory(key: String, isUserClicked: Boolean) {
+        val remoteData: ArrayList<Production> = arrayListOf()
+        isCategoryClicked = isUserClicked
         currentCategory = key
 
         val list = productionDataByFiller.filter {
             it.categoryKey == key
         }
 
-        productionData.value = ProductionData(
-            joinFavoriteData(
-                list as ArrayList<Production>,
-                PreferencesUtil.getStringArrayPref(app) as ArrayList<String>
+        remoteData.addAll(list)
+
+        PreferencesUtil.getStringArrayPref(app)?.let {
+            productionData.value = ProductionData(
+                joinFavoriteData(
+                    remoteData,
+                    it as ArrayList<String>
+                )
             )
-        )
+        } ?: run {
+            productionData.value = ProductionData(
+                list as ArrayList<Production>
+            )
+        }
     }
 
     fun getProductions() {

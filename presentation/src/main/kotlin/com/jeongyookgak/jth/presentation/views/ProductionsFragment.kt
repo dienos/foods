@@ -1,6 +1,5 @@
 package com.jeongyookgak.jth.presentation.views
 
-import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +15,6 @@ class ProductionsFragment : BaseFragment<ProductionsFragmentBinding>() {
     companion object {
         const val PUT_EXTRA_DETAIL = "put_extra_detail"
     }
-
 
     private lateinit var progress: JeongYookGakLoading
 
@@ -37,10 +35,11 @@ class ProductionsFragment : BaseFragment<ProductionsFragmentBinding>() {
 
     override fun onResume() {
         super.onResume()
+
         if(viewModel.currentCategory.isEmpty()) {
             viewModel.getProductions()
         } else {
-            viewModel.getProductionsByCategory(viewModel.currentCategory)
+            viewModel.getProductionsByCategory(viewModel.currentCategory, false)
         }
     }
 

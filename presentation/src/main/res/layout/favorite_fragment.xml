@@ -26,7 +26,7 @@
             android:orientation="horizontal"
             android:nestedScrollingEnabled="true"
             app:layout_constraintTop_toBottomOf="parent"
-            app:favorites="@{viewModel.productionData.list}"
+            app:favorites="@{viewModel.favoriteData.list}"
             app:viewModel="@{viewModel}"/>
     </LinearLayout>
 </layout>

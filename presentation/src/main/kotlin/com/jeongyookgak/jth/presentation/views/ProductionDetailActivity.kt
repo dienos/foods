@@ -8,7 +8,7 @@ import com.jeongyookgak.jth.presentation.JeongYookGakApplication
 import com.jeongyookgak.jth.presentation.R
 import com.jeongyookgak.jth.presentation.databinding.ProductionDetailActivityBinding
 import com.jeongyookgak.jth.presentation.viewmodels.ProductionDetailViewModel
-import com.jeongyookgak.jth.presentation.views.ListFragment.Companion.PUT_EXTRA_DETAIL
+import com.jeongyookgak.jth.presentation.views.ProductionsFragment.Companion.PUT_EXTRA_DETAIL
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

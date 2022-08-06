@@ -12,13 +12,14 @@ import com.jeongyookgak.jth.data.model.ProductionItem
 import com.jeongyookgak.jth.domain.model.remote.Production
 import com.jeongyookgak.jth.presentation.BR
 import com.jeongyookgak.jth.presentation.JeongYookGakApplication.Companion.controlFavoriteList
-import com.jeongyookgak.jth.presentation.JeongYookGakApplication.Companion.favoriteList
 import com.jeongyookgak.jth.presentation.databinding.ProductionItemBinding
-import com.jeongyookgak.jth.presentation.di.PreferencesUtil.setStringArrayPref
+import com.jeongyookgak.jth.presentation.viewmodels.ProductionViewModel
+import com.jeongyookgak.jth.presentation.views.ProductionsFragment.Companion.PUT_EXTRA_DETAIL
 
 class ProductionListAdapter(
     private val context: Context,
-    private val list: List<Production>
+    private val list: List<Production>,
+    private val viewModel: ProductionViewModel
 ) :
     RecyclerView.Adapter<ProductionListAdapter.ViewHolder>() {
     private lateinit var binding: ProductionItemBinding
@@ -37,7 +38,7 @@ class ProductionListAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    private class DiffCallback(oldList: List<Production>, newList: List<Production>) :
+    inner class DiffCallback(oldList: List<Production>, newList: List<Production>) :
         DiffUtil.Callback() {
         private val oldList: List<Production>
         private val newList: List<Production>
@@ -56,15 +57,17 @@ class ProductionListAdapter(
         }
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition].key == newList[newItemPosition].key
+            val oldItem: Production = oldList[oldItemPosition]
+            val newItem: Production = newList[newItemPosition]
+
+            return oldItem.key == newItem.key
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             val oldItem: Production = oldList[oldItemPosition]
             val newItem: Production = newList[newItemPosition]
-            println("oldKey"+oldItem.key)
-            println("newKey"+newItem.key )
-            return oldItem.key == newItem.key
+
+           return oldItem.key == newItem.key
         }
 
         @Nullable
@@ -85,10 +88,15 @@ class ProductionListAdapter(
                 isChecked = isChecked,
                 data = list[position]
             )
+
+            if (viewModel.currentCategory.isEmpty()) {
+                viewModel.getProductions()
+            } else {
+                viewModel.getProductionsByCategory(viewModel.currentCategory, false)
+            }
         }
 
         binding.itemRoot.setOnClickListener {
-            list[position].isFavorite = binding.favoriteCheck.isChecked
             val intent = Intent(context, ProductionDetailActivity::class.java)
             intent.putExtra(PUT_EXTRA_DETAIL, list[position] as ProductionItem)
             context.startActivity(intent)

@@ -17,7 +17,7 @@ import java.text.DecimalFormat
 @BindingAdapter(value = ["categories", "viewModel"])
 fun setCategoryList(view: RecyclerView, list: List<Category>?, viewModel: ProductionViewModel) {
     list?.let {
-        if(view.adapter == null) {
+        if (view.adapter == null) {
             CategoryListAdapter(view.context, viewModel, list).apply {
                 view.adapter = this
                 view.layoutManager = LinearLayoutManager(view.context)
@@ -31,21 +31,34 @@ fun setCategoryList(view: RecyclerView, list: List<Category>?, viewModel: Produc
     }
 }
 
-@BindingAdapter(value = ["productions"])
-fun setProductionList(view: RecyclerView, list: List<Production>?) {
+private fun setProductionListAdapter(
+    view: RecyclerView,
+    list: List<Production>?,
+    viewModel: ProductionViewModel
+) {
+    ProductionListAdapter(view.context, list!!, viewModel).apply {
+        view.adapter = this
+        view.layoutManager = LinearLayoutManager(view.context)
+        view.layoutManager = LinearLayoutManager(
+            view.context,
+            RecyclerView.VERTICAL,
+            false
+        )
+    }
+}
+
+@BindingAdapter(value = ["productions", "viewModel"])
+fun setProductionList(view: RecyclerView, list: List<Production>?, viewModel: ProductionViewModel) {
     list?.let {
         view.adapter?.apply {
-            (this as ProductionListAdapter).updateProductions(list)
-        }?: run {
-            ProductionListAdapter(view.context, list).apply {
-                view.adapter = this
-                view.layoutManager = LinearLayoutManager(view.context)
-                view.layoutManager = LinearLayoutManager(
-                    view.context,
-                    RecyclerView.VERTICAL,
-                    false
-                )
+            if(viewModel.isCategoryClicked) {
+                setProductionListAdapter(view, list, viewModel)
+            } else {
+                (this as ProductionListAdapter).updateProductions(list)
             }
+
+        } ?: run {
+            setProductionListAdapter(view, list, viewModel)
         }
     }
 }
@@ -55,7 +68,7 @@ fun setFavoriteList(view: RecyclerView, list: List<Production>?, viewModel: Favo
     list?.let {
         view.adapter?.apply {
             (this as FavoriteListAdapter).updateProductions(list)
-        }?: run {
+        } ?: run {
             FavoriteListAdapter(view.context, viewModel, list).apply {
                 view.adapter = this
                 view.layoutManager = LinearLayoutManager(view.context)
