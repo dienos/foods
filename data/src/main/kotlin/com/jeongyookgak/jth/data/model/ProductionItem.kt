@@ -2,6 +2,7 @@ package com.jeongyookgak.jth.data.model
 
 import com.google.gson.annotations.SerializedName
 import com.jeongyookgak.jth.domain.model.remote.Production
+import java.io.Serializable
 
 data class ProductionItem(
     @SerializedName("key")
@@ -23,7 +24,7 @@ data class ProductionItem(
     val _order: Int,
 
     var _isFavorite: Boolean = false
-) : Production {
+) : Production, Serializable {
     override var isFavorite: Boolean
         get() = _isFavorite
         set(value) {

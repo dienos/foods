@@ -19,13 +19,13 @@ import javax.inject.Inject
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
-    @Inject lateinit var networkUtil: NetworkUtil
     @Inject lateinit var aniUtil: AnimationUtil
 
     private val viewModel by viewModels<SplashViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val networkUtil = NetworkUtil(this)
         networkUtil.registerNetworkCallback()
 
         setContentView(R.layout.splash_activity)

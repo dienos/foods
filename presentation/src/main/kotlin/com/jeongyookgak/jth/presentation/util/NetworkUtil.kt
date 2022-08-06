@@ -21,7 +21,7 @@ class NetworkUtil @Inject constructor(private val context: Context) {
     }
 
     fun checkNetwork() : Boolean {
-        val connectivityManager = context?.getSystemService(ConnectivityManager::class.java)
+        val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
         connectivityManager?.activeNetworkInfo?.let {
             return it.isConnectedOrConnecting
@@ -29,7 +29,7 @@ class NetworkUtil @Inject constructor(private val context: Context) {
     }
 
     fun registerNetworkCallback() {
-        val connectivityManager = context?.getSystemService(ConnectivityManager::class.java)
+        val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
         val networkRequest = NetworkRequest.Builder()
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
             .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
@@ -38,7 +38,7 @@ class NetworkUtil @Inject constructor(private val context: Context) {
     }
 
     fun terminateNetworkCallback() {
-        val connectivityManager = context?.getSystemService(ConnectivityManager::class.java)
+        val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
         connectivityManager?.unregisterNetworkCallback(networkCallBack)
     }
 

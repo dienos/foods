@@ -22,8 +22,8 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = DataBindingUtil.setContentView(this, getLayoutResId())
+        networkUtil.registerNetworkCallback()
         initializeViewModel()
         initializeView()
         initializeUiEvent()
