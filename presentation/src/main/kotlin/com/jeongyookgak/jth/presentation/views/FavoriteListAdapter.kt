@@ -10,11 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jeongyookgak.jth.domain.model.remote.Production
 import com.jeongyookgak.jth.presentation.BR
 import com.jeongyookgak.jth.presentation.databinding.FavoriteItemBinding
-import com.jeongyookgak.jth.presentation.viewmodels.FavoriteViewModel
 
 class FavoriteListAdapter(
     private val context: Context,
-    private val viewModel: FavoriteViewModel,
     private val list: List<Production>
 ) : RecyclerView.Adapter<FavoriteListAdapter.ViewHolder>() {
     private lateinit var binding: FavoriteItemBinding
@@ -26,7 +24,7 @@ class FavoriteListAdapter(
     }
 
     interface OnCheckedChangeListener {
-        fun onChange(isChecked: Boolean, item : Production)
+        fun onChange(isChecked: Boolean, item: Production)
     }
 
     fun setOnClickListener(listener: OnClickListener) {

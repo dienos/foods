@@ -10,6 +10,7 @@ import com.jeongyookgak.jth.domain.model.remote.Category
 import com.jeongyookgak.jth.domain.model.remote.Production
 import com.jeongyookgak.jth.presentation.JeongYookGakApplication
 import com.jeongyookgak.jth.presentation.R
+import com.jeongyookgak.jth.presentation.di.PreferencesUtil
 import com.jeongyookgak.jth.presentation.viewmodels.FavoriteViewModel
 import com.jeongyookgak.jth.presentation.viewmodels.ProductionViewModel
 import com.jeongyookgak.jth.presentation.views.*
@@ -48,8 +49,12 @@ fun setProductionList(view: RecyclerView, list: List<Production>?, viewModel: Pr
     }
 }
 
-private fun setFavoriteAdapter(view: RecyclerView, list : List<Production>, viewModel: FavoriteViewModel) {
-    FavoriteListAdapter(view.context, viewModel, list).apply {
+private fun setFavoriteAdapter(
+    view: RecyclerView,
+    list: List<Production>,
+    viewModel: FavoriteViewModel
+) {
+    FavoriteListAdapter(view.context, list).apply {
         view.adapter = this
         view.layoutManager = LinearLayoutManager(view.context)
         view.layoutManager = LinearLayoutManager(
@@ -61,21 +66,30 @@ private fun setFavoriteAdapter(view: RecyclerView, list : List<Production>, view
         setOnClickListener(object : FavoriteListAdapter.OnClickListener {
             override fun onClick(item: Production) {
                 item.isFavorite = true
-                val intent = Intent(view.context , ProductionDetailActivity::class.java)
+                val intent = Intent(view.context, ProductionDetailActivity::class.java)
                 intent.putExtra(PUT_EXTRA_DETAIL, item as ProductionItem)
                 view.context.startActivity(intent)
             }
         })
 
         setOnCheckedChangeListener(object : FavoriteListAdapter.OnCheckedChangeListener {
-            override fun onChange(isChecked: Boolean, item : Production) {
-                JeongYookGakApplication.controlFavoriteList(
-                    context = view.context,
-                    isChecked = isChecked,
-                    data = item
-                )
+            override fun onChange(isChecked: Boolean, item: Production) {
+                if (isChecked.not()) {
+                    JeongYookGakApplication.controlFavoriteList(
+                        context = view.context,
+                        isChecked = isChecked,
+                        data = item
+                    )
 
-                viewModel.getFavorite()
+                    val searchText = PreferencesUtil.getSearchText(view.context)
+
+                    if (searchText.isNullOrEmpty()) {
+                        viewModel.getFavorite()
+                    } else {
+                        viewModel.getFavorite()
+                        viewModel.findSearWord(searchText)
+                    }
+                }
             }
         })
     }
@@ -86,28 +100,13 @@ fun setFavoriteList(view: RecyclerView, list: List<Production>?, viewModel: Favo
     list?.let {
         view.adapter?.apply {
             val adapter = this as FavoriteListAdapter
-            adapter.updateFavorite(list)
 
-            adapter.setOnCheckedChangeListener(object : FavoriteListAdapter.OnCheckedChangeListener {
-                override fun onChange(isChecked: Boolean, item : Production) {
-                    JeongYookGakApplication.controlFavoriteList(
-                        context = view.context,
-                        isChecked = isChecked,
-                        data = item
-                    )
-
-                    viewModel.getFavorite()
-                }
-            })
-
-            adapter.setOnClickListener(object : FavoriteListAdapter.OnClickListener {
-                override fun onClick(item: Production) {
-                    item.isFavorite = true
-                    val intent = Intent(view.context , ProductionDetailActivity::class.java)
-                    intent.putExtra(PUT_EXTRA_DETAIL, item as ProductionItem)
-                    view.context.startActivity(intent)
-                }
-            })
+            if(viewModel.needRefresh) {
+                setFavoriteAdapter(view, list, viewModel)
+                viewModel.needRefresh = false
+            } else {
+                adapter.updateFavorite(list)
+            }
         } ?: run {
             setFavoriteAdapter(view, list, viewModel)
         }

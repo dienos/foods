@@ -23,9 +23,13 @@
         android:padding="10dp">
 
         <TextView
+            android:id="@+id/favorite_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:text="@{favorite_item.name}"
             android:textColor="@color/black"
             android:textSize="20sp"

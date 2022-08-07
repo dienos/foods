@@ -21,9 +21,11 @@ class FavoriteViewModel @Inject constructor(
 ) : BaseViewModel(app) {
     val favoriteData = MutableLiveData<ProductionData>()
     val searchText = MutableLiveData("")
-    var productionDataByFiller: List<Production> = arrayListOf()
+    private var productionDataByFiller: List<Production> = arrayListOf()
 
-    private val searchList : ArrayList<Production> = arrayListOf()
+    var productionDataForSearch: ArrayList<Production> = arrayListOf()
+    private val searchResultList: ArrayList<Production> = arrayListOf()
+    var needRefresh = false
 
     private fun getOnlyFavoriteData(
         remoteData: ArrayList<Production>,
@@ -59,23 +61,24 @@ class FavoriteViewModel @Inject constructor(
         return result
     }
 
-    fun findSearWord(searchWord : String) {
-        val list = favoriteData.value?.list
-        searchList.clear()
+    fun findSearWord(searchWord: String) {
+        searchResultList.clear()
 
-        list?.forEach {
+        productionDataForSearch.forEach {
             val matcher = KoreanTextMatcher(searchWord)
             val match = matcher.match(it.name)
 
             if (match.success()) {
-                searchList.add(it)
+                searchResultList.add(it)
             }
         }
+
+        updateSearchLiveData()
     }
 
-    fun updateSearchLiveData() {
-        val list : ArrayList<Production> = arrayListOf()
-        list.addAll(searchList)
+    private fun updateSearchLiveData() {
+        val list: ArrayList<Production> = arrayListOf()
+        list.addAll(searchResultList)
         favoriteData.value = ProductionData(list)
     }
 
@@ -87,6 +90,11 @@ class FavoriteViewModel @Inject constructor(
                     PreferencesUtil.getStringArrayPref(app) as ArrayList<String>
                 )
             )
+
+            favoriteData.value?.list?.let {
+                productionDataForSearch.clear()
+                productionDataForSearch.addAll(it)
+            } ?: productionDataForSearch.clear()
         }
     }
 

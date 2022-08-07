@@ -9,7 +9,6 @@ import com.jeongyookgak.jth.presentation.JeongYookGakApplication.Companion.setSe
 import com.jeongyookgak.jth.presentation.R
 import com.jeongyookgak.jth.presentation.databinding.FavoriteFragmentBinding
 import com.jeongyookgak.jth.presentation.di.PreferencesUtil.getSearchText
-import com.jeongyookgak.jth.presentation.di.PreferencesUtil.setSearchText
 import com.jeongyookgak.jth.presentation.viewmodels.FavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -41,7 +40,6 @@ class FavoriteFragment : BaseFragment<FavoriteFragmentBinding>() {
             viewModel.getFavorite()
         } else {
             viewModel.findSearWord(searchText)
-            viewModel.updateSearchLiveData()
         }
     }
 
@@ -68,11 +66,12 @@ class FavoriteFragment : BaseFragment<FavoriteFragmentBinding>() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
+                viewModel.needRefresh = true
+
                 if (s.toString().isEmpty()) {
                     viewModel.getFavorite()
                 } else {
                     viewModel.findSearWord(s.toString())
-                    viewModel.updateSearchLiveData()
                 }
 
                 setSearchWord(context, s.toString())
