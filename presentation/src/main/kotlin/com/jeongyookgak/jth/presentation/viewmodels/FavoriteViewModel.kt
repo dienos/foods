@@ -19,6 +19,10 @@ class FavoriteViewModel @Inject constructor(
     app: Application,
     private val getProductionsUseCase: GetProductionsUseCase
 ) : BaseViewModel(app) {
+    companion object {
+        var firstInitialize = true
+    }
+
     val favoriteData = MutableLiveData<ProductionData>()
     val searchText = MutableLiveData("")
     private var productionDataByFiller: List<Production> = arrayListOf()
@@ -95,6 +99,12 @@ class FavoriteViewModel @Inject constructor(
                 productionDataForSearch.clear()
                 productionDataForSearch.addAll(it)
             } ?: productionDataForSearch.clear()
+
+            val searchText = PreferencesUtil.getSearchText(app)
+
+            if(firstInitialize &&  searchText?.isEmpty()?.not()!!) {
+                findSearWord(searchText)
+            }
         }
     }
 
