@@ -19,10 +19,6 @@ class FavoriteViewModel @Inject constructor(
     app: Application,
     private val getProductionsUseCase: GetProductionsUseCase
 ) : BaseViewModel(app) {
-    companion object {
-        var firstInitialize = true
-    }
-
     val favoriteData = MutableLiveData<ProductionData>()
     val searchText = MutableLiveData("")
     private var productionDataByFiller: List<Production> = arrayListOf()
@@ -68,12 +64,16 @@ class FavoriteViewModel @Inject constructor(
     fun findSearWord(searchWord: String) {
         searchResultList.clear()
 
-        productionDataForSearch.forEach {
-            val matcher = KoreanTextMatcher(searchWord)
-            val match = matcher.match(it.name)
+        if(productionDataForSearch.isEmpty()) {
+            getFavorite()
+        } else {
+            productionDataForSearch.forEach {
+                val matcher = KoreanTextMatcher(searchWord)
+                val match = matcher.match(it.name)
 
-            if (match.success()) {
-                searchResultList.add(it)
+                if (match.success()) {
+                    searchResultList.add(it)
+                }
             }
         }
 
@@ -99,12 +99,6 @@ class FavoriteViewModel @Inject constructor(
                 productionDataForSearch.clear()
                 productionDataForSearch.addAll(it)
             } ?: productionDataForSearch.clear()
-
-            val searchText = PreferencesUtil.getSearchText(app)
-
-            if(firstInitialize &&  searchText?.isEmpty()?.not()!!) {
-                findSearWord(searchText)
-            }
         }
     }
 
@@ -120,6 +114,12 @@ class FavoriteViewModel @Inject constructor(
                     val response = getProductionsUseCase.invoke()
                     updateProductionLiveData(response.productions)
                     productionDataByFiller = response.productions
+
+                    val searchText = PreferencesUtil.getSearchText(app)
+
+                    if(searchText?.isNotEmpty()!!) {
+                        findSearWord(searchText)
+                    }
 
                     updateProgress(false)
                 } catch (e: Exception) {
